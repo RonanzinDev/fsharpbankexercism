@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "Xp0y59841PKinSSGTz2E9omguh0wnrgBEJ9LId3FaDgUzhX7LTz3Q6spOg7YJVfM1K08I3dDtdl9sAhSkmM6XQ==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Ronan\\Desktop\\Prog\\fsharp\\fsharp.fsproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Ronan\\.nuget\\packages\\fsharp.core\\5.0.0\\fsharp.core.5.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
