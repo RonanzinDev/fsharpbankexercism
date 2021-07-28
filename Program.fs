@@ -1,3 +1,4 @@
+open System
 open System.Collections.Generic
 
 type Usuario =
@@ -6,10 +7,10 @@ type Usuario =
       Email: string
       Balance: int }
 
-let salvarUsuario = new Dictionary<int, Usuario>()
+let usuariosSalvos = new Dictionary<int, Usuario>()
 
 let criarUsuario (nome: string, email: string, balance: int) =
-    let id = salvarUsuario.Values.Count + 1
+    let id = usuariosSalvos.Values.Count + 1
 
     let novoUsuario =
         { Id = id
@@ -17,7 +18,7 @@ let criarUsuario (nome: string, email: string, balance: int) =
           Email = email
           Balance = balance }
 
-    salvarUsuario.Add(id, novoUsuario)
+    usuariosSalvos.Add(id, novoUsuario)
     novoUsuario
 
 let usuario1 =
@@ -26,27 +27,29 @@ let usuario1 =
 let usuario2 =
     criarUsuario ("Rafael", "r@gmail.com", 1000)
 
-let pegarUsuario = salvarUsuario.Values |> Seq.toList
+let usuarios = usuariosSalvos.Values |> Seq.toList
+
+let existeUsuarioComId id =
+    usuarios |> List.exists (fun x -> x.Id = id)
 
 let buscarPorId id =
-    if salvarUsuario.ContainsKey(id) then
-        Some salvarUsuario.[id]
-    else
-        None
+    match (existeUsuarioComId id) with
+    | false -> None
+    | _ -> Some usuariosSalvos.[id]
 
+let temSaldoSuficiente (conta: Usuario) (valor: int) : bool = conta.Balance >= valor
 
-let validar (conta: Usuario, valor: int) = if conta.Balance < valor then 1 else 0
+let tranferir (remetente: Usuario) (para: Usuario) (valor: int) : (int * int) option =
+    match (temSaldoSuficiente remetente valor) with
+    | false -> None
+    | _ -> Some(remetente.Balance - valor, para.Balance + valor)
 
+[<EntryPoint>]
+let main argv =
+    tranferir usuario1 usuario2 100
+    |> Option.defaultValue (0, 0)
+    |> printfn "%A"
 
-let tranferir (de: Usuario, para: Usuario, valor: int) =
-    if validar (de, valor) = 1 then
-        let user1 = de.Balance - valor
-        let user2 = para.Balance + valor
-        user1, user2
-    else
-        1, 2
+    0 // return an integer exit code
 
-    de, para
-
-let resultado = tranferir (usuario1, usuario2, 100)
-printfn "%A" resultado
+    0 // return an integer exit code
